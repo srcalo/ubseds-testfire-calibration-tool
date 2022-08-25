@@ -9,7 +9,7 @@ import numpy as np
 # print(ord("d"))
 # print(ord(" "))
 
-insane_program = [chr(101),chr(108),chr(111),chr(111),chr(87),chr(32),chr(114),chr(87),chr(114),chr(111),chr(100)]
+insane_array = [chr(72),chr(101),chr(108),chr(108),chr(111),chr(32),chr(87),chr(111),chr(114),chr(108),chr(100)]
 
-for WHAT, WHOKNOWS in enumerate(insane_program):
+for WHOKNOWS in insane_array:
     print(WHOKNOWS, end = "")
