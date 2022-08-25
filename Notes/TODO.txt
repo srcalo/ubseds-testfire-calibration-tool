@@ -1,0 +1,8 @@
+# CSV Formatting
+ - Test for empty rows at top or bottom
+ - Replace empty rows inbetween data with 0s
+ - Add error handling for more than one column of data
+ - Remove empty columns
+
+# GUI
+ - Propulsion mode (Dario knows)
