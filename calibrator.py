@@ -14,9 +14,9 @@ with open(filename) as File:
     for row in data:
         graph.append(float(row[0]))
 
-graphDiff = np.diff(graph)
 
-plt.plot(graphDiff)
+
+plt.plot(graph)
 plt.ylabel("Voltage (mV)")
 plt.show()
 
@@ -25,12 +25,22 @@ plt.show()
     a certain number of points on the graph remains nearly constant
     for long enough
 '''
-for x, y in enumerate(graphDiff[:-1]):
-    x = 0
+results = [] # dictionary of results formatted as [value, startTime, duration]
+
+value = 0
+startTime = 0
+duration = 0
+
+yPrev = graph[0]
+avg = 0
+count = 0
+
+for x, y in enumerate(graph[:-1]):
+    dif = y - yPrev
     
 
 
 
-plt.plot(graphDiff)
+plt.plot(graph)
 plt.ylabel("Voltage (mV)")
 plt.show()
