@@ -2,43 +2,48 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from GetData import cutData
-
-# Config
-filename = 'data\\calibration-data-raw.csv'
-timeThresh = 0  # The minimum amount of time that a plateau exists before its counted
-maxVariance = 0 # Maximum difference between points before a plataeu no longer exists
+from constant import *
 
 
-graph = cutData(pd.read_csv(filename))
 
 
 '''
+    findPlateau(graph: pandas.dataframe)
+
     Finds the values at which the graph plateaus by checking if 
     a certain number of points on the graph remains nearly constant
     for long enough
+
+    Running versions of values is when you calculate the value (i.e. mean) without having to maintain a total sum
+    This way we can do our calculations in one sweep and not multiple
+    
+    Running variance algorithm based on the following blog post
+    https://www.johndcook.com/blog/standard_deviation/
 '''
-def findPlateau():
-    results = [] # dictionary of results formatted as [value, startTime, duration]
+def findPlateau(graph):
+    results = []    # dictionary of plateau values formatted as [value, startTime, duration]
+    value = startTime = duration = 0
 
-    value = 0
-    startTime = 0
-    duration = 0
-
-    yPrev = graph[0]
-    avg = graph=[0]
-    avgSq = avg**2
-    variance = 0
+    # Initialize variance values
+    prevMean = graph[0]
+    prevStdDev = 0
+    
     count = 1
 
     for x, y in enumerate(graph[:-1]):
-        count = count
+
+        mean = prevMean + (y - prevMean)/x                  # Calculate running mean
+        stdDev = prevStdDev + (y - prevMean)*(y - mean)     # Calculate running standard deviation
+        variance = stdDev/(x-1)                             # calculate running variance
+
+    return results
 
 
-'''
-    Calculates an average when adding a value to an existing average
-'''
-def calculateAverage(oldAverage, newValue, newN):
-    return oldAverage + (newValue - oldAverage)/newN
+
+# Config
+filename = 'data\\calibration-data-raw.csv'
+
+graph = cutData(pd.read_csv(filename))
 
 plt.plot(graph)
 plt.ylabel("Voltage (mV)")
