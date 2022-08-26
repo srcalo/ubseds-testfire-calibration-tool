@@ -1,6 +1,7 @@
-import csv
-import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from GetData import cutData
 
 # Config
 filename = 'data\\calibration-data-raw.csv'
@@ -8,17 +9,8 @@ timeThresh = 0  # The minimum amount of time that a plateau exists before its co
 maxVariance = 0 # Maximum difference between points before a plataeu no longer exists
 
 
-with open(filename) as File:
-    data = csv.reader(File)
-    graph = []
-    for row in data:
-        graph.append(float(row[0]))
+graph = cutData(pd.read_csv(filename))
 
-
-
-plt.plot(graph)
-plt.ylabel("Voltage (mV)")
-plt.show()
 
 '''
     Finds the values at which the graph plateaus by checking if 
@@ -33,10 +25,11 @@ duration = 0
 
 yPrev = graph[0]
 avg = 0
+variance = 0
 count = 0
 
 for x, y in enumerate(graph[:-1]):
-    dif = y - yPrev
+    
     
 
 

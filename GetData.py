@@ -3,9 +3,12 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import time
 
+'''
+    This function takes in a pandas dataset and returns
+    the trimmed data with some padding
+'''
 def cutData(dataset):
-    '''This function takes in a pandas dataset and returns
-    the trimmed data with some padding'''
+
 
     staticValues = dataset['values'][0:10] # takes the first ten data points
     maxVal = (np.max(staticValues)) # gets the maximum of those values
