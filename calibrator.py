@@ -17,22 +17,28 @@ graph = cutData(pd.read_csv(filename))
     a certain number of points on the graph remains nearly constant
     for long enough
 '''
-results = [] # dictionary of results formatted as [value, startTime, duration]
+def findPlateau():
+    results = [] # dictionary of results formatted as [value, startTime, duration]
 
-value = 0
-startTime = 0
-duration = 0
+    value = 0
+    startTime = 0
+    duration = 0
 
-yPrev = graph[0]
-avg = 0
-variance = 0
-count = 0
+    yPrev = graph[0]
+    avg = graph=[0]
+    avgSq = avg**2
+    variance = 0
+    count = 1
 
-for x, y in enumerate(graph[:-1]):
-    
-    
+    for x, y in enumerate(graph[:-1]):
+        count = count
 
 
+'''
+    Calculates an average when adding a value to an existing average
+'''
+def calculateAverage(oldAverage, newValue, newN):
+    return oldAverage + (newValue - oldAverage)/newN
 
 plt.plot(graph)
 plt.ylabel("Voltage (mV)")
