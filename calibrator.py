@@ -24,30 +24,48 @@ def findPlateau(graph):
     results = []    # dictionary of plateau values formatted as [value, startTime, duration]
     value = startTime = duration = 0
 
-    # Initialize variance values
+    # Initialize variance 
+    print(graph[0])
     prevMean = graph[0]
+    print(prevMean)
     prevStdDev = 0
-    
+    varianceGraph = []
     count = 1
+    variance = 0
 
-    for x, y in enumerate(graph[:-1]):
+    for x, y in enumerate(graph[:-1], 2):
+        # If variance has increased beyond our threshold, record identified plateau using the mean
+        # Then, reset running values and counter
+        
+        if(variance > MAXVARIANCE): # If variance is > THRESHOLD
+            # Save average as plateau val
+            # Reset prevMean and prevStdDev
+            prevMean = y
+            prevStdDev = 0
+            count = 1 # Reset point counter
+        
+        count += 1 # Increase counter
 
-        mean = prevMean + (y - prevMean)/x                  # Calculate running mean
-        stdDev = prevStdDev + (y - prevMean)*(y - mean)     # Calculate running standard deviation
-        variance = stdDev/(x-1)                             # calculate running variance
-
+        mean = prevMean + ((y - prevMean)/count)                # Calculate running mean
+        stdDev = prevStdDev + (y - prevMean)*(y - mean)         # Calculate running standard deviation
+        variance = stdDev/(count-1)                             # calculate running variance
+        
+        varianceGraph.append(variance)
 
         prevMean = mean
         prevStdDev = stdDev
-    return results
+    return varianceGraph
 
 
 
 # Config
 filename = 'data\\calibration-data-raw.csv'
 
-graph = cutData(pd.read_csv(filename))
-
-plt.plot(graph)
+graph = cutData(pd.read_csv(filename,names=['values']))
+varGraph = findPlateau(graph['values'])
+plt.figure(1)
 plt.ylabel("Voltage (mV)")
+plt.plot(graph)
+plt.figure(2)
+plt.plot(varGraph)
 plt.show()
