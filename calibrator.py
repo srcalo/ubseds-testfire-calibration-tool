@@ -36,6 +36,9 @@ def findPlateau(graph):
         stdDev = prevStdDev + (y - prevMean)*(y - mean)     # Calculate running standard deviation
         variance = stdDev/(x-1)                             # calculate running variance
 
+
+        prevMean = mean
+        prevStdDev = stdDev
     return results
 
 
