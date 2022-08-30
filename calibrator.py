@@ -22,39 +22,47 @@ from constant import *
 '''
 def findPlateau(graph):
     results = []    # dictionary of plateau values formatted as [value, startTime, duration]
+    varianceGraph = []
     value = startTime = duration = 0
 
-    # Initialize variance 
-    print(graph[0])
+    # Initialize statistics 
+    time = 1
     prevMean = graph[0]
-    print(prevMean)
     prevStdDev = 0
-    varianceGraph = []
-    count = 1
     variance = 0
+    start = 0
+    end = 0
+    total = 1
+    
 
     for x, y in enumerate(graph[:-1], 2):
         # If variance has increased beyond our threshold, record identified plateau using the mean
         # Then, reset running values and counter
         
-        if(variance > MAXVARIANCE): # If variance is > THRESHOLD
-            # Save average as plateau val
-            # Reset prevMean and prevStdDev
+        if(not len(results) or variance > MAXVARIANCE and time > TIMETHRESHOLD):
+            results.append([prevMean, start, x, time])# Save average as plateau val
+            
+            # Reset stats
             prevMean = y
             prevStdDev = 0
-            count = 1 # Reset point counter
+            time = 1
+            total = 1
+            start = x
         
-        count += 1 # Increase counter
+        time += 1 # Increase counter
 
-        mean = prevMean + ((y - prevMean)/count)                # Calculate running mean
-        stdDev = prevStdDev + (y - prevMean)*(y - mean)         # Calculate running standard deviation
-        variance = stdDev/(count-1)                             # calculate running variance
+        if(time > TIMETHRESHOLD):
+            total += 1 # Include new point
+            mean = prevMean + ((y - prevMean)/total)            # Calculate running mean
+            stdDev = prevStdDev + (y - prevMean)*(y - mean)     # Calculate running standard deviation
+            variance = stdDev/(total-1)                         # calculate running variance
         
+            prevMean = mean
+            prevStdDev = stdDev
+    
         varianceGraph.append(variance)
 
-        prevMean = mean
-        prevStdDev = stdDev
-    return varianceGraph
+    return [results, varianceGraph]
 
 
 
@@ -62,10 +70,21 @@ def findPlateau(graph):
 filename = 'data\\calibration-data-raw.csv'
 
 graph = cutData(pd.read_csv(filename,names=['values']))
-varGraph = findPlateau(graph['values'])
+res = findPlateau(graph['values'])
+
+
 plt.figure(1)
 plt.ylabel("Voltage (mV)")
+
+print(f"Plateaus: {len(res[0])}")
+for i, val in enumerate(res[0], 1):
+    print(f"Num: {i}, height: {val[0]}")
+    plt.hlines(val[0], val[2] - 200, val[2] + 200, color="red")
+    plt.vlines(val[2], val[0] - 200, val[0] + 200, color="red")
+
 plt.plot(graph)
+
+
 plt.figure(2)
-plt.plot(varGraph)
+plt.plot(res[1])
 plt.show()
