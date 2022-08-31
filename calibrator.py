@@ -39,6 +39,14 @@ def findPlateau(graph):
         # If variance has increased beyond our threshold, record identified plateau using the mean
         # Then, reset running values and counter
         
+        time += 1 # Increase counter
+
+        if(time > CALCTHRESH+1):
+            total += 1 # Include new point
+            mean = prevMean + ((y - prevMean)/(time-CALCTHRESH))            # Calculate running mean
+            stdDev = prevStdDev + (y - prevMean)*(y - mean)     # Calculate running standard deviation
+            variance = stdDev/((time-CALCTHRESH)-1)                         # calculate running variance
+        
         if(not len(results) or variance > MAXVARIANCE and time > TIMETHRESHOLD):
             results.append([prevMean, start, x, time])# Save average as plateau val
             
@@ -48,15 +56,7 @@ def findPlateau(graph):
             time = 1
             total = 1
             start = x
-        
-        time += 1 # Increase counter
 
-        if(time > TIMETHRESHOLD):
-            total += 1 # Include new point
-            mean = prevMean + ((y - prevMean)/total)            # Calculate running mean
-            stdDev = prevStdDev + (y - prevMean)*(y - mean)     # Calculate running standard deviation
-            variance = stdDev/(total-1)                         # calculate running variance
-        
             prevMean = mean
             prevStdDev = stdDev
     
