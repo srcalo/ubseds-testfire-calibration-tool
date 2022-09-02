@@ -21,12 +21,12 @@ from constant import *
     https://www.johndcook.com/blog/standard_deviation/
 '''
 def findPlateau(graph):
-    results = []    # dictionary of plateau values formatted as [value, startTime, duration]
+    results = []    # dictionary of plateau values formatted as [value, startTime, endTime, duration]
     varianceGraph = []
     value = startTime = duration = 0
 
     # Initialize statistics 
-    time = 1
+    duration = 1
     start = 0
     prevMean = graph[0]
     prevStdDev = 0
@@ -37,21 +37,20 @@ def findPlateau(graph):
     for x, y in enumerate(graph[:-1], 2):
         # If variance has increased beyond our threshold, record identified plateau using the mean
         # Then, reset running values and counter
-        if(not len(results) or variance > MAXVARIANCE and time > TIMETHRESHOLD):
-            results.append([prevMean, start, x, time])# Save average as plateau val
+        if(not len(results) or variance > MAXVARIANCE and duration > TIMETHRESHOLD):
+            results.append([prevMean, start, x, duration])# Save average as plateau val
             
             # Reset stats
             prevMean = y
             prevStdDev = 0
-            time = 1
-            total = 1
+            duration = 1
             start = x
 
-        time += 1 # Increase counter
-        if(time > CALCTHRESH+1):
-            mean = prevMean + ((y - prevMean)/(time-CALCTHRESH))            # Calculate running mean
-            stdDev = prevStdDev + (y - prevMean)*(y - mean)                 # Calculate running standard deviation
-            variance = stdDev/((time-CALCTHRESH)-1)                         # calculate running variance
+        duration += 1 # Increase counter
+        if(duration > CALCTHRESH+1):
+            mean = prevMean + ((y - prevMean)/(duration-CALCTHRESH))            # Calculate running mean
+            stdDev = prevStdDev + (y - prevMean)*(y - mean)                     # Calculate running standard deviation
+            variance = stdDev/((duration-CALCTHRESH)-1)                         # calculate running variance
         
             prevMean = mean
             prevStdDev = stdDev
@@ -73,13 +72,15 @@ res = findPlateau(graph['values'])
 plt.figure(1)
 plt.ylabel("Voltage (mV)")
 
+plt.plot(graph)
 print(f"Plateaus: {len(res[0])}")
 for i, val in enumerate(res[0], 1):
+    plt.hlines(val[0], val[1], val[2], color="orange")
     print(f"Num: {i}, height: {val[0]}")
-    plt.hlines(val[0], val[2] - 200, val[2] + 200, color="red")
-    plt.vlines(val[2], val[0] - 200, val[0] + 200, color="red")
+    # plt.hlines(val[0], val[2] - 200, val[2] + 200, color="red")
+    # plt.vlines(val[2], val[0] - 200, val[0] + 200, color="red")
 
-plt.plot(graph)
+
 
 
 plt.figure(2)
