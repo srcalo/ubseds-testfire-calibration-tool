@@ -30,15 +30,18 @@ def cutData(dataset):
 
     return cutData
 
-# filename = 'raw\\5-07-22_Test_Fire_Data_Raw.csv'
+if __name__ == "__main__":
 
-# df = pd.read_csv(filename,names=['values']) # turns csv file into a usable dataset 
+    filename_Windows = 'raw\\5-07-22_Test_Fire_Data_Raw.csv'
+    filename_MacOS = 'raw/5-07-22_Test_Fire_Data_Raw.csv'
 
-# data = cutData(df) # gets the cut data
+    df = pd.read_csv(filename_MacOS,names=['values']) # turns csv file into a usable dataset 
 
-# data.to_csv("cutData.csv") # creates a csv file with just the cut data
+    data = cutData(df) # gets the cut data
 
-# # plots the cut data
-# plt.plot(data) 
-# plt.ylabel("Voltage (mV)")
-# plt.show()
+    data.to_csv("cutData.csv") # creates a csv file with just the cut data
+
+    # plots the cut data
+    plt.plot(data) 
+    plt.ylabel("Voltage (mV)")
+    plt.show()

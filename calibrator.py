@@ -63,9 +63,10 @@ def findPlateau(graph):
 
 
 # Config
-filename = 'data\\calibration-data-raw.csv'
+filename_Windows = 'data\\calibration-data-raw.csv'
+filename_MacOS = 'data/calibration-data-raw.csv'
 
-graph = cutData(pd.read_csv(filename,names=['values']))
+graph = cutData(pd.read_csv(filename_MacOS,names=['values']))
 res = findPlateau(graph['values'])
 
 
