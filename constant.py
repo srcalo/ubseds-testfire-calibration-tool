@@ -1,4 +1,6 @@
 ''' findPlateau Config '''
-TIMETHRESHOLD = 200     # The minimum amount of time before another plateau can be recorded
-MAXVARIANCE =  2000     # Maximum variance of a set of points before the plateau no longer exists
-CALCTHRESH = 100        # How many points are needed to calculate the variance before the variance can be used
+
+DATARANGE = 100          # How many previous points to use as reference for averages
+TIMETHRESHOLD = 300     # The minimum amount of time before another plateau can be recorded
+MAXVARIANCE =  30      # Maximum variance of a set of points before the plateau no longer exists
+CALCTHRESH = TIMETHRESHOLD/2        # How long to wait before calculating variance again
