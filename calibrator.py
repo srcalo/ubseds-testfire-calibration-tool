@@ -22,7 +22,7 @@ from constant import *
     https://www.johndcook.com/blog/standard_deviation/
 '''
 def findPlateau(graph):
-    graph = sc.signal.medfilt(graph, 301)
+    graph = filter(graph)
     results = []    # dictionary of plateau values formatted as [value, startTime, endTime, duration]
     varianceGraph = []
     value = startTime = duration = 0
@@ -67,6 +67,13 @@ def findPlateau(graph):
     return [results, varianceGraph]
 
 
+def filter(input):
+    return sc.signal.medfilt(input, FILTWIDTH)
+
+
+
+
+
 
 # Config
 filename_Windows = 'data\\calibration-data-raw.csv'
@@ -81,19 +88,25 @@ res = findPlateau(graph)
 
 
 plt.figure(1)
+plt.title("Raw Data")
+plt.xlabel("Time (ms)")
 plt.ylabel("Voltage (mV)")
-
 plt.plot(graph)
+
+plt.figure(2)
+plt.title("Variance")
+plt.xlabel("Time (ms)")
+plt.ylabel("Voltage (mV)")
+plt.plot(res[1])
+
+plt.figure(3)
+plt.title("Filtered data")
+plt.xlabel("Time (ms)")
+plt.ylabel("Voltage (mV)")
+plt.plot(filter(graph))
 print(f"Plateaus: {len(res[0])}")
 for i, val in enumerate(res[0], 1):
     plt.hlines(val[0], val[1], val[2], color="orange")
     print(f"Num: {i}, height: {val[0]}")
-    # plt.hlines(val[0], val[2] - 200, val[2] + 200, color="red")
-    # plt.vlines(val[2], val[0] - 200, val[0] + 200, color="red")
 
-
-
-
-plt.figure(2)
-plt.plot(res[1])
 plt.show()
