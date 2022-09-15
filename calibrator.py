@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import scipy as sc
 from GetData import cutData
 from constant import *
 
@@ -21,6 +22,7 @@ from constant import *
     https://www.johndcook.com/blog/standard_deviation/
 '''
 def findPlateau(graph):
+    graph = filter(graph)
     results = []    # dictionary of plateau values formatted as [value, startTime, endTime, duration]
     varianceGraph = []
     value = startTime = duration = 0
@@ -41,16 +43,20 @@ def findPlateau(graph):
             results.append([prevMean, start, x, duration])# Save average as plateau val
             
             # Reset stats
-            prevMean = y
+            prevMean = -1
             prevStdDev = 0
             duration = 1
-            start = x
+            start = x + CALCTHRESH
 
         duration += 1 # Increase counter
-        if(duration > CALCTHRESH+1):
+        if(duration > CALCTHRESH):
+
+            if(prevMean < 0 or prevStdDev < 0):
+                prevMean = y 
+
             mean = prevMean + ((y - prevMean)/(duration-CALCTHRESH))            # Calculate running mean
             stdDev = prevStdDev + (y - prevMean)*(y - mean)                     # Calculate running standard deviation
-            variance = stdDev/((duration-CALCTHRESH)-1)                         # calculate running variance
+            variance = stdDev/(duration-CALCTHRESH)                         # calculate running variance
         
             prevMean = mean
             prevStdDev = stdDev
@@ -61,29 +67,46 @@ def findPlateau(graph):
     return [results, varianceGraph]
 
 
+def filter(input):
+    return sc.signal.medfilt(input, FILTWIDTH)
+
+
+
+
+
 
 # Config
 filename_Windows = 'data\\calibration-data-raw.csv'
 filename_MacOS = 'data/calibration-data-raw.csv'
 
+
 graph = cutData(pd.read_csv(filename_MacOS,names=['values']))
-res = findPlateau(graph['values'])
+graph = graph['values'].to_list()
+
+
+res = findPlateau(graph)
 
 
 plt.figure(1)
+plt.title("Raw Data")
+plt.xlabel("Time (ms)")
 plt.ylabel("Voltage (mV)")
-
 plt.plot(graph)
+
+plt.figure(2)
+plt.title("Variance")
+plt.xlabel("Time (ms)")
+plt.ylabel("Voltage (mV)")
+plt.plot(res[1])
+
+plt.figure(3)
+plt.title("Filtered data")
+plt.xlabel("Time (ms)")
+plt.ylabel("Voltage (mV)")
+plt.plot(filter(graph))
 print(f"Plateaus: {len(res[0])}")
 for i, val in enumerate(res[0], 1):
     plt.hlines(val[0], val[1], val[2], color="orange")
     print(f"Num: {i}, height: {val[0]}")
-    # plt.hlines(val[0], val[2] - 200, val[2] + 200, color="red")
-    # plt.vlines(val[2], val[0] - 200, val[0] + 200, color="red")
 
-
-
-
-plt.figure(2)
-plt.plot(res[1])
 plt.show()
