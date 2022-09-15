@@ -56,7 +56,7 @@ def findPlateau(graph):
 
             mean = prevMean + ((y - prevMean)/(duration-CALCTHRESH))            # Calculate running mean
             stdDev = prevStdDev + (y - prevMean)*(y - mean)                     # Calculate running standard deviation
-            variance = stdDev/(duration-CALCTHRESH)                         # calculate running variance
+            variance = stdDev/(duration-CALCTHRESH)                             # calculate running variance
         
             prevMean = mean
             prevStdDev = stdDev
@@ -76,11 +76,12 @@ def filter(input):
 
 
 # Config
-filename_Windows = 'data\\calibration-data-raw.csv'
-filename_MacOS = 'data/calibration-data-raw.csv'
+filename1 = 'data/calibration-data-raw.csv'
+filename2 = 'Raw/5-07-22_Test_Fire_Calibration_2_Raw.csv'
+filename3 = 'Raw/5-07-22_Test_Fire_Data_Raw.csv'
 
 
-graph = cutData(pd.read_csv(filename_MacOS,names=['values']))
+graph = cutData(pd.read_csv(filename1,names=['values']))
 graph = graph['values'].to_list()
 
 
