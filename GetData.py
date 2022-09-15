@@ -36,12 +36,14 @@ if __name__ == "__main__":
     filename_MacOS = 'raw/5-07-22_Test_Fire_Data_Raw.csv'
 
     df = pd.read_csv(filename_MacOS,names=['values']) # turns csv file into a usable dataset 
-
+    
     data = cutData(df) # gets the cut data
 
     data.to_csv("cutData.csv") # creates a csv file with just the cut data
 
     # plots the cut data
+    plt.plot(df) 
+    plt.ylabel("Voltage (mV)")
     plt.plot(data) 
     plt.ylabel("Voltage (mV)")
     plt.show()
