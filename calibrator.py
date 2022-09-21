@@ -73,14 +73,16 @@ def filter(input):
 
 
 
+if __name__ == "__main__": 
 
+    # Config
+    filename1_Windows = 'data/calibration-data-raw.csv'
+    filename1_MacOS = 'data\\calibration-data-raw.csv'
+    filename2_Windows = 'Raw/5-07-22_Test_Fire_Calibration_2_Raw.csv'
+    filename2_MacOS = 'Raw\\5-07-22_Test_Fire_Calibration_2_Raw.csv'
+    filename3_Windows = 'Raw/5-07-22_Test_Fire_Data_Raw.csv'
+    filename3_MacOS = 'Raw\\5-07-22_Test_Fire_Data_Raw.csv'
 
-# Config
-filename1 = 'data/calibration-data-raw.csv'
-filename2 = 'Raw/5-07-22_Test_Fire_Calibration_2_Raw.csv'
-filename3 = 'Raw/5-07-22_Test_Fire_Data_Raw.csv'
-
-if(__name__ == "__main__"):
     graph = cutData(pd.read_csv(filename1,names=['values']))
     graph = graph['values'].to_list()
 

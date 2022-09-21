@@ -42,8 +42,8 @@ if __name__ == "__main__":
     data.to_csv("cutData.csv") # creates a csv file with just the cut data
 
     # plots the cut data
-    plt.plot(df) 
-    plt.ylabel("Voltage (mV)")
+    # plt.plot(df)
+    # plt.ylabel("Voltage (mV)")
     plt.plot(data) 
     plt.ylabel("Voltage (mV)")
     plt.show()
