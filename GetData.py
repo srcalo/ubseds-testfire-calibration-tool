@@ -10,7 +10,7 @@ import time
 def cutData(dataset):
 
 
-    staticValues = dataset['values'][0:10] # takes the first ten data points
+    staticValues = dataset['values'][0:1000] # takes the first ten data points
     maxVal = (np.max(staticValues)) # gets the maximum of those values
     booleanData = [dataset['values'] > maxVal] # creates an array of booleans that are True if they are > maxVal
 
@@ -34,8 +34,9 @@ if __name__ == "__main__":
 
     filename_Windows = 'raw\\5-07-22_Test_Fire_Data_Raw.csv'
     filename_MacOS = 'raw/5-07-22_Test_Fire_Data_Raw.csv'
+    Testfire1_MacOS = '2022_2023_Data/TestFire1.csv'
 
-    df = pd.read_csv(filename_MacOS,names=['values']) # turns csv file into a usable dataset 
+    df = pd.read_csv(Testfire1_MacOS,names=['values']) # turns csv file into a usable dataset 
     
     data = cutData(df) # gets the cut data
 

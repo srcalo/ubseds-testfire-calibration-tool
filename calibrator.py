@@ -77,13 +77,14 @@ if __name__ == "__main__":
 
     # Config
     filename1_Windows = 'data/calibration-data-raw.csv'
-    filename1_MacOS = 'data\\calibration-data-raw.csv'
+    filename1_MacOS = 'data/calibration-data-raw.csv'
     filename2_Windows = 'Raw/5-07-22_Test_Fire_Calibration_2_Raw.csv'
-    filename2_MacOS = 'Raw\\5-07-22_Test_Fire_Calibration_2_Raw.csv'
+    filename2_MacOS = 'Raw/5-07-22_Test_Fire_Calibration_2_Raw.csv'
     filename3_Windows = 'Raw/5-07-22_Test_Fire_Data_Raw.csv'
-    filename3_MacOS = 'Raw\\5-07-22_Test_Fire_Data_Raw.csv'
+    filename3_MacOS = 'Raw/5-07-22_Test_Fire_Data_Raw.csv'
+    Testfire1_MacOS = '2022_2023_Data/Calibration1.csv'
 
-    graph = cutData(pd.read_csv(filename1_MacOS,names=['values']))
+    graph = cutData(pd.read_csv(Testfire1_MacOS,names=['values']))
     graph = graph['values'].to_list()
 
 
