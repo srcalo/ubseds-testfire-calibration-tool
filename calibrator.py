@@ -80,34 +80,34 @@ filename1 = 'data/calibration-data-raw.csv'
 filename2 = 'Raw/5-07-22_Test_Fire_Calibration_2_Raw.csv'
 filename3 = 'Raw/5-07-22_Test_Fire_Data_Raw.csv'
 
-
-graph = cutData(pd.read_csv(filename1,names=['values']))
-graph = graph['values'].to_list()
-
-
-res = findPlateau(graph)
+if(__name__ == "__main__"):
+    graph = cutData(pd.read_csv(filename1,names=['values']))
+    graph = graph['values'].to_list()
 
 
-plt.figure(1)
-plt.title("Raw Data")
-plt.xlabel("Time (ms)")
-plt.ylabel("Voltage (mV)")
-plt.plot(graph)
+    res = findPlateau(graph)
 
-plt.figure(2)
-plt.title("Variance")
-plt.xlabel("Time (ms)")
-plt.ylabel("Voltage (mV)")
-plt.plot(res[1])
 
-plt.figure(3)
-plt.title("Filtered data")
-plt.xlabel("Time (ms)")
-plt.ylabel("Voltage (mV)")
-plt.plot(filter(graph))
-print(f"Plateaus: {len(res[0])}")
-for i, val in enumerate(res[0], 1):
-    plt.hlines(val[0], val[1], val[2], color="orange")
-    print(f"Num: {i}, height: {val[0]}")
+    plt.figure(1)
+    plt.title("Raw Data")
+    plt.xlabel("Time (ms)")
+    plt.ylabel("Voltage (mV)")
+    plt.plot(graph)
 
-plt.show()
+    plt.figure(2)
+    plt.title("Variance")
+    plt.xlabel("Time (ms)")
+    plt.ylabel("Voltage (mV)")
+    plt.plot(res[1])
+
+    plt.figure(3)
+    plt.title("Filtered data")
+    plt.xlabel("Time (ms)")
+    plt.ylabel("Voltage (mV)")
+    plt.plot(filter(graph))
+    print(f"Plateaus: {len(res[0])}")
+    for i, val in enumerate(res[0], 1):
+        plt.hlines(val[0], val[1], val[2], color="orange")
+        print(f"Num: {i}, height: {val[0]}")
+
+    plt.show()
