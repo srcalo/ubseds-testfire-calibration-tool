@@ -83,7 +83,7 @@ if __name__ == "__main__":
     filename3_Windows = 'Raw/5-07-22_Test_Fire_Data_Raw.csv'
     filename3_MacOS = 'Raw\\5-07-22_Test_Fire_Data_Raw.csv'
 
-    graph = cutData(pd.read_csv(filename1,names=['values']))
+    graph = cutData(pd.read_csv(filename1_MacOS,names=['values']))
     graph = graph['values'].to_list()
 
 
