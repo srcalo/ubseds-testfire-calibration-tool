@@ -25,7 +25,6 @@ def findPlateau(graph):
     graph = filter(graph)
     results = []    # dictionary of plateau values formatted as [value, startTime, endTime, duration]
     varianceGraph = []
-    value = startTime = duration = 0
 
     # Initialize statistics 
     duration = 1
@@ -37,32 +36,30 @@ def findPlateau(graph):
     
 
     for x, y in enumerate(graph[:-1], 2):
-        # If variance has increased beyond our threshold, record identified plateau using the mean
-        # Then, reset running values and counter
-        if(not len(results) or variance > MAXVARIANCE and duration > TIMETHRESHOLD):
-            results.append([prevMean, start, x, duration])# Save average as plateau val
-            
-            # Reset stats
-            prevMean = -1
-            prevStdDev = 0
-            duration = 1
-            start = x + CALCTHRESH
-
         duration += 1 # Increase counter
-        if(duration > CALCTHRESH):
+        if(x%CALCRATE == 0 ): 
+            # If variance has increased beyond our threshold, record identified plateau using the mean
+            # Then, reset running values and counter
+            if(not len(results) or variance > MAXVARIANCE and duration > TIMETHRESHOLD):
+                results.append([prevMean, start, x, duration])# Save average as plateau val
 
-            if(prevMean < 0 or prevStdDev < 0):
-                prevMean = y 
+                # Reset stats
+                prevMean = -1
+                prevStdDev = 0
+                duration = 1
+                start = x + CALCTHRESH
 
-            mean = prevMean + ((y - prevMean)/(duration-CALCTHRESH))            # Calculate running mean
-            stdDev = prevStdDev + (y - prevMean)*(y - mean)                     # Calculate running standard deviation
-            variance = stdDev/(duration-CALCTHRESH)                             # calculate running variance
-        
-            prevMean = mean
-            prevStdDev = stdDev
+            
+            if(duration > CALCTHRESH):      # Only calculate at CALCRATE and check if it's been enough time since the last plateau
+                mean = prevMean + ((y - prevMean)/(duration-CALCTHRESH))            # Calculate running mean
+                stdDev = (prevStdDev + (y - prevMean)*(y - mean))                   # Calculate running standard deviation
+                variance = stdDev/(duration-CALCTHRESH)                             # calculate running variance
+            
+                prevMean = mean
+                prevStdDev = stdDev
 
     
-        varianceGraph.append(variance)
+        varianceGraph.append(prevMean)
 
     return [results, varianceGraph]
 
@@ -74,17 +71,11 @@ def filter(input):
 
 
 if __name__ == "__main__": 
-
     # Config
-    filename1_Windows = 'data/calibration-data-raw.csv'
-    filename1_MacOS = 'data/calibration-data-raw.csv'
-    filename2_Windows = 'Raw/5-07-22_Test_Fire_Calibration_2_Raw.csv'
-    filename2_MacOS = 'Raw/5-07-22_Test_Fire_Calibration_2_Raw.csv'
-    filename3_Windows = 'Raw/5-07-22_Test_Fire_Data_Raw.csv'
-    filename3_MacOS = 'Raw/5-07-22_Test_Fire_Data_Raw.csv'
-    Testfire1_MacOS = '2022_2023_Data/Calibration1.csv'
+    testfire0 = 'data/calibration-data-raw.csv'
+    testfire1 = '2022_2023_Data/Calibration1.csv'
 
-    graph = cutData(pd.read_csv(Testfire1_MacOS,names=['values']))
+    graph = cutData(pd.read_csv(testfire1,names=['values']))
     graph = graph['values'].to_list()
 
 
